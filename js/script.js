@@ -7,6 +7,7 @@ FSJS Project 2 - Data Pagination and Filtering
  * Global Variables 
  **/
 const classList = document.querySelector('ul.student-list');
+const linkList = document.querySelector('ul.link-list');
 
 /**
  * displays page of student info cards
@@ -42,11 +43,39 @@ const showPage = (list, page) => {
   });
 };
 
-showPage(data, 1);
-
 /*
 Create the `addPagination` function
 This function will create and insert/append the elements needed for the pagination buttons
 */
 
+const addPagination = (list) => {
+  const pages = Math.ceil(list.length / 9);
+  linkList.innerHTML = '';
+  console.log(pages);
+  console.log(typeof pages);
+  console.log(pages.length);
+
+  for (let i = 0; i < pages; i++) {
+    const button = `
+        <li>
+          <button type="button">${i + 1}</button>
+        </li>
+       `;
+    linkList.insertAdjacentHTML('beforeend', button);
+  }
+
+  const button = document.querySelector('button');
+  button.className = 'active';
+
+  linkList.addEventListener('click', (e) => {
+    target = e.target;
+    if (target.tagName === 'BUTTON') {
+      document.querySelector('.active').classList.remove('active');
+      target.classList.add('active');
+    }
+  });
+};
+
 // Call functions
+showPage(data, 1);
+addPagination(data);
