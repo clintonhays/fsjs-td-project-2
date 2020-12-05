@@ -6,14 +6,22 @@ FSJS Project 2 - Data Pagination and Filtering
 /**
  * Global Variables 
  **/
-
 const classList = document.querySelector('ul.student-list');
+
+/**
+ * displays page of student info cards
+ * 
+ * @param {array} list - A list of student information objects
+ * @param {number} page - Current page displayed
+ * 
+ */
 
 const showPage = (list, page) => {
   const firstIndex = page * 9 - 9;
   const finalIndex = page * 9;
-  ul.innerHtml = '';
+  classList.innerHtml = '';
 
+  // loop through array and create student card based on object data
   list.forEach((item, index) => {
     if (index >= firstIndex && index < finalIndex) {
       const studentItem = `
@@ -24,18 +32,17 @@ const showPage = (list, page) => {
             <span class="email">${item.email}</span>
          </div>
          <div class="joined-details">
-            <span class="date">Joined ${item.registered.length}</span>
+            <span class="date">Joined ${item.registered.date}</span>
          </div>
          </li>
         `;
+      // insert student data to div
+      classList.innerHTML += studentItem;
     }
   });
 };
 
-/*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
+showPage(data, 1);
 
 /*
 Create the `addPagination` function
