@@ -20,15 +20,15 @@ header.insertAdjacentHTML(
  **/
 
 const search = document.querySelector('#search');
-const submit = document.querySelector('submit');
+const submit = document.querySelector('#submit');
 const studentList = document.querySelector('ul.student-list');
 const linkList = document.querySelector('ul.link-list');
 
 /**
  * displays page of student info cards
  * 
- * @param {array} list - A list of student information objects
- * @param {number} page - Current page displayed
+ * @param {array} list - list of student information objects
+ * @param {number} page - current page displayed
  * 
  */
 
@@ -40,6 +40,7 @@ const showPage = (list, page) => {
   // loop through array and create student card based on object data
   list.forEach((student, index) => {
     const { picture, name, email, registered } = student;
+    //check index of student object
     if (index >= firstIndex && index < finalIndex) {
       const studentItem = `
          <li class="student-item cf">
@@ -53,7 +54,6 @@ const showPage = (list, page) => {
          </div>
          </li>
         `;
-      // insert student data to div
       studentList.insertAdjacentHTML('beforeend', studentItem);
     }
   });
@@ -62,14 +62,16 @@ const showPage = (list, page) => {
 /**
  * display pagination buttons based on length of data array
  * 
- * @param {array} list - A list of student information objects
+ * @param {array} list - list of student information objects
  * 
  */
 
 const addPagination = (list) => {
+  // determine number pagination buttons to display
   const pages = Math.ceil(list.length / 9);
   linkList.innerHTML = '';
 
+  // loop over pages total and create button for each page
   for (let i = 0; i < pages; i++) {
     const button = `
         <li>
@@ -79,9 +81,13 @@ const addPagination = (list) => {
     linkList.insertAdjacentHTML('beforeend', button);
   }
 
+  // target firt pagination button & add class
   const button = document.querySelector('#pagination-button');
   button.className = 'active';
 
+  /* when button is clicked, remove active class from prev button
+   * and apply it to current button
+   */
   linkList.addEventListener('click', (e) => {
     target = e.target;
     if (target.tagName === 'BUTTON') {
@@ -93,36 +99,49 @@ const addPagination = (list) => {
 };
 
 /**
+ * display no results notice for search
+ */
+
+const noResults = () => {
+  const alert = `
+      <h1 id="no-results">No results found</h1>
+   `;
+
+  studentList.innerHTML = alert;
+  linkList.innerHTML = '';
+};
+
+/**
+ * search through student array and insert matching student objects
  * 
+ * @param {string} input - value of search input
+ * @param {array} list - list of student information objects
  */
 
 const searchFunc = (input, list) => {
   const newStudentList = [];
 
+  // loop over student array and add objects that match search value
   list.forEach((student) => {
-    const { picture, name, email, registered } = student;
+    const { name } = student;
     const studentName = `${name.first} ${name.last}`;
     if (studentName.toLowerCase().includes(input.value.toLowerCase())) {
-      const studentItem = `
-         <li class="student-item cf">
-            <div class="student-details">
-            <img class="avatar" src=${picture.large} alt="Profile Picture">
-            <h3>${name.first} ${name.last}</h3>
-            <span class="email">${email}</span>
-         </div>
-         <div class="joined-details">
-            <span class="date">Joined ${registered.date}</span>
-         </div>
-         </li>
-        `;
-      newStudentList.push(studentItem);
+      newStudentList.push(student);
       showPage(newStudentList, 1);
       addPagination(newStudentList);
     }
   });
+  // call noResults function if no search results are found
+  if (newStudentList.length === 0) {
+    noResults();
+  }
 };
 
 search.addEventListener('keyup', () => {
+  searchFunc(search, data);
+});
+
+submit.addEventListener('click', () => {
   searchFunc(search, data);
 });
 
