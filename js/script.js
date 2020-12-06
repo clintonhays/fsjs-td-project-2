@@ -4,9 +4,24 @@ FSJS Project 2 - Data Pagination and Filtering
 */
 
 /**
+ * insert search form
+ **/
+const header = document.querySelector('header');
+header.insertAdjacentHTML(
+  'beforeend',
+  `<label for="search" class="student-search">
+      <input id="search" placeholder="Search by name...">
+      <button id="submit" type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+   </label>`
+);
+
+/**
  * Global Variables 
  **/
-const classList = document.querySelector('ul.student-list');
+
+const search = document.querySelector('search');
+const submit = document.querySelector('submit');
+const studentList = document.querySelector('ul.student-list');
 const linkList = document.querySelector('ul.link-list');
 
 /**
@@ -20,7 +35,7 @@ const linkList = document.querySelector('ul.link-list');
 const showPage = (list, page) => {
   const firstIndex = page * 9 - 9;
   const finalIndex = page * 9;
-  classList.innerHtml = '';
+  studentList.innerHTML = '';
 
   // loop through array and create student card based on object data
   list.forEach((item, index) => {
@@ -38,15 +53,17 @@ const showPage = (list, page) => {
          </li>
         `;
       // insert student data to div
-      classList.innerHTML += studentItem;
+      studentList.insertAdjacentHTML('beforeend', studentItem);
     }
   });
 };
 
-/*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
-*/
+/**
+ * display pagination buttons based on length of data array
+ * 
+ * @param {array} list - A list of student information objects
+ * 
+ */
 
 const addPagination = (list) => {
   const pages = Math.ceil(list.length / 9);
@@ -58,23 +75,35 @@ const addPagination = (list) => {
   for (let i = 0; i < pages; i++) {
     const button = `
         <li>
-          <button type="button">${i + 1}</button>
+          <button id="pagination-button" type="button">${i + 1}</button>
         </li>
        `;
     linkList.insertAdjacentHTML('beforeend', button);
   }
 
-  const button = document.querySelector('button');
+  const button = document.querySelector('#pagination-button');
   button.className = 'active';
 
   linkList.addEventListener('click', (e) => {
     target = e.target;
+    console.log(target.textContent);
     if (target.tagName === 'BUTTON') {
       document.querySelector('.active').classList.remove('active');
       target.classList.add('active');
-      showPage(list);
+      showPage(list, target.textContent);
     }
   });
+};
+
+/**
+ * 
+ */
+
+const searchFunc = (input, list) => {
+  console.log(input);
+  console.log(list);
+
+  // const students =
 };
 
 // Call functions
