@@ -19,7 +19,7 @@ header.insertAdjacentHTML(
  * Global Variables 
  **/
 
-const search = document.querySelector('search');
+const search = document.querySelector('#search');
 const submit = document.querySelector('submit');
 const studentList = document.querySelector('ul.student-list');
 const linkList = document.querySelector('ul.link-list');
@@ -38,17 +38,18 @@ const showPage = (list, page) => {
   studentList.innerHTML = '';
 
   // loop through array and create student card based on object data
-  list.forEach((item, index) => {
+  list.forEach((student, index) => {
+    const { picture, name, email, registered } = student;
     if (index >= firstIndex && index < finalIndex) {
       const studentItem = `
          <li class="student-item cf">
             <div class="student-details">
-            <img class="avatar" src=${item.picture.large} alt="Profile Picture">
-            <h3>${item.name.first} ${item.name.last}</h3>
-            <span class="email">${item.email}</span>
+            <img class="avatar" src=${picture.large} alt="Profile Picture">
+            <h3>${name.first} ${name.last}</h3>
+            <span class="email">${email}</span>
          </div>
          <div class="joined-details">
-            <span class="date">Joined ${item.registered.date}</span>
+            <span class="date">Joined ${registered.date}</span>
          </div>
          </li>
         `;
@@ -68,9 +69,6 @@ const showPage = (list, page) => {
 const addPagination = (list) => {
   const pages = Math.ceil(list.length / 9);
   linkList.innerHTML = '';
-  console.log(pages);
-  console.log(typeof pages);
-  console.log(pages.length);
 
   for (let i = 0; i < pages; i++) {
     const button = `
@@ -86,7 +84,6 @@ const addPagination = (list) => {
 
   linkList.addEventListener('click', (e) => {
     target = e.target;
-    console.log(target.textContent);
     if (target.tagName === 'BUTTON') {
       document.querySelector('.active').classList.remove('active');
       target.classList.add('active');
@@ -100,12 +97,22 @@ const addPagination = (list) => {
  */
 
 const searchFunc = (input, list) => {
-  console.log(input);
-  console.log(list);
-
-  // const students =
+  const newStudentList = [];
+  list.forEach((student) => {
+    const name = `${student.name.first} ${student.name.last}`;
+    if (name.toLowerCase().includes(input.value.toLowerCase())) {
+      newStudentList.push(name);
+      showPage(newStudentList, 1);
+      addPagination(newStudentList);
+    }
+  });
 };
+
+search.addEventListener('keyup', () => {
+  searchFunc(search, data);
+});
 
 // Call functions
 showPage(data, 1);
 addPagination(data);
+// searchFunc(search, data);
