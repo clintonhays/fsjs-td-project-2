@@ -100,9 +100,9 @@ const searchFunc = (input, list) => {
   const newStudentList = [];
 
   list.forEach((student) => {
-    const name = `${student.name.first} ${student.name.last}`;
-    if (name.toLowerCase().includes(input.value.toLowerCase())) {
-      const { picture, name, email, registered } = student;
+    const { picture, name, email, registered } = student;
+    const studentName = `${name.first} ${name.last}`;
+    if (studentName.toLowerCase().includes(input.value.toLowerCase())) {
       const studentItem = `
          <li class="student-item cf">
             <div class="student-details">
