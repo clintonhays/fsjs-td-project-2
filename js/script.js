@@ -98,10 +98,24 @@ const addPagination = (list) => {
 
 const searchFunc = (input, list) => {
   const newStudentList = [];
+
   list.forEach((student) => {
     const name = `${student.name.first} ${student.name.last}`;
     if (name.toLowerCase().includes(input.value.toLowerCase())) {
-      newStudentList.push(name);
+      const { picture, name, email, registered } = student;
+      const studentItem = `
+         <li class="student-item cf">
+            <div class="student-details">
+            <img class="avatar" src=${picture.large} alt="Profile Picture">
+            <h3>${name.first} ${name.last}</h3>
+            <span class="email">${email}</span>
+         </div>
+         <div class="joined-details">
+            <span class="date">Joined ${registered.date}</span>
+         </div>
+         </li>
+        `;
+      newStudentList.push(studentItem);
       showPage(newStudentList, 1);
       addPagination(newStudentList);
     }
@@ -115,4 +129,3 @@ search.addEventListener('keyup', () => {
 // Call functions
 showPage(data, 1);
 addPagination(data);
-// searchFunc(search, data);
