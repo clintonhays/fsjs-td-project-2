@@ -104,7 +104,7 @@ const addPagination = (list) => {
 
 const noResults = () => {
   const alert = `
-      <h1 id="no-results">No results found</h1>
+      <h1 class="no-results">No results found</h1>
    `;
 
   studentList.innerHTML = alert;
